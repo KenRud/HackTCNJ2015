@@ -15,7 +15,7 @@
 
         </activity>
         <activity
-            android:name=".Playback"
+            android:name=".PlaybackActivity"
             android:label="@string/title_activity_playback" >
 
             <intent-filter>
