@@ -3,6 +3,7 @@
     package="edu.tcnj.hacktcnj2015" >
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +24,4 @@
             android:label="@string/title_activity_playback" >
         </activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
