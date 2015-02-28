@@ -2,4 +2,8 @@
     <string name="app_name">HackTCNJ2015</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_playback">Playback</string>
+
+    <string name="playback_title">Playback</string>
+    <string name="play">Play</string>
 </resources>
