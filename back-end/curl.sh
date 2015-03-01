@@ -10,3 +10,5 @@
 #curl -X GET -H "Content-Type: application/json" -d '{"name":"Derek Duchesne"}' http://localhost:6969/return_friends;
 #curl -X GET -H "Content-Type: application/json" -d '{"name1":"Derek Duchesne", "name2":"Kenny Ruddick"}' http://localhost:6969/make_game;
 #curl -X GET -H "Content-Type: application/json" -d '{"name":"Derek Duchesne"}' http://localhost:6969/return_games;
+#curl -X GET -H "Content-Type: application/json" -d '{"name1":"Derek Duchesne", "name2":"Mitch Kobil", "turn": "1", "score1":"2", "score2":"3", "video" : "wtf"}' http://localhost:6969/update_game;
+curl -X GET -H "Content-Type: application/json" -d '{"name1":"Derek Duchesne", "name2":"Dan Seminara"}' http://localhost:6969/make_game;
