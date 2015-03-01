@@ -9,4 +9,4 @@
 #curl -X GET -H "Content-Type: application/json" -d '{"name1":"Kenny Ruddick", "name2":"Derek Duchesne"}' http://localhost:6969/make_friends;
 #curl -X GET -H "Content-Type: application/json" -d '{"name":"Derek Duchesne"}' http://localhost:6969/return_friends;
 #curl -X GET -H "Content-Type: application/json" -d '{"name1":"Derek Duchesne", "name2":"Kenny Ruddick"}' http://localhost:6969/make_game;
-curl -X GET -H "Content-Type: application/json" -d '{"name":"Derek Duchesne"}' http://localhost:6969/return_games;
+#curl -X GET -H "Content-Type: application/json" -d '{"name":"Derek Duchesne"}' http://localhost:6969/return_games;
