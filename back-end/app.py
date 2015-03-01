@@ -46,6 +46,13 @@ def make_friends():
 	conn = connect_db()
 	db = conn.cursor()
 	db.execute("PRAGMA foreign_keys = ON;")
+	db.execute("SELECT * FROM FRIENDS WHERE NAME1 = ? AND NAME2 = ?", (user1, user2))
+	first_query = db.fetchone()
+	db.execute("SELECT * FROM FRIENDS WHERE NAME1 = ? AND NAME2 = ?", (user2, user1))
+	second_query = db.fetchone()
+	print first_query,second_query
+	if first_query is not None or second_query is not None:
+		return "Frienship is already made."
 	db.execute("INSERT INTO FRIENDS (NAME1,NAME2) VALUES (?,?);", (user1, user2))
 	conn.commit()
 	conn.close()
