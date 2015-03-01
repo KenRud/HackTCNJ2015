@@ -16,6 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +42,7 @@ import edu.tcnj.hacktcnj2015.dummy.GameContent;
 public class ItemFragment extends Fragment implements AbsListView.OnItemClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String SERVER_URL = "http://45.56.96.115:6969/";
+    public static final String SERVER_URL = "http://45.56.96.115:6969/return_games";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,7 +109,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
-        new GetVideo().execute(SERVER_URL);
+        new GetVideo().execute(SERVER_URL + "/Derek%20Duchesne");
 
         return view;
     }
@@ -165,12 +169,10 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
 
     }
 
-    public class GetVideo extends AsyncTask<String, String, String> {
-
-        private String result;
+    public class GetVideo extends AsyncTask<String, String, JSONObject> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected JSONObject doInBackground(String... params) {
             URL url = null;
             try {
                 url = new URL(params[0]);
@@ -198,20 +200,34 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
             } finally {
                 urlConnection.disconnect();
             }
-            result = sb.toString();
 
-            System.out.println(result);
+            String str = sb.toString();
+            JSONObject result = null;
 
-            return "";
+            try {
+                result = new JSONObject(str);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return result;
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(JSONObject result) {
             super.onPostExecute(result);
             GameContent.clear();
+            try {
+                JSONArray games = result.getJSONArray("result");
+                System.out.println(games);
+                for (int i=0; i<games.length(); i++) {
+                    GameContent.addItem(new GameContent.GameItem("DanSteve", games.getJSONArray(i).getString(1)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             GameContent.addItem(new GameContent.GameItem("DanSteve", "pizzaaaaaaaaaaaaaa!"));
-            GameContent.addItem(new GameContent.GameItem("2", "Item 2"));
-            GameContent.addItem(new GameContent.GameItem("3", "Item 3"));
             mAdapter.notifyDataSetChanged();
         }
     }

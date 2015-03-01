@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class PlaybackActivity extends ActionBarActivity {
+    private final PlaybackFragment playbackFragment = new PlaybackFragment();
+    private final ChallengeFragment challengeFragment = new ChallengeFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +23,10 @@ public class PlaybackActivity extends ActionBarActivity {
         setContentView(R.layout.activity_playback);
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaybackFragment())
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, playbackFragment)
+                    .add(R.id.container, challengeFragment)
+                    .hide(challengeFragment)
                     .commit();
         }
     }
@@ -46,5 +51,14 @@ public class PlaybackActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void switchToChallengeScreen(View view) {
+        playbackFragment.stopVideo();
+        challengeFragment.loadAudio();
+        getFragmentManager().beginTransaction()
+                .hide(playbackFragment)
+                .show(challengeFragment)
+                .commit();
     }
 }
