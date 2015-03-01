@@ -51,6 +51,28 @@ def make_friends():
 	conn.close()
 	return "0"
 
+@app.route("/return_games", methods = ["POST", "GET"])
+def return_games():
+	incoming = request.json
+	user = incoming['name']
+	conn = connect_db()
+	db = conn.cursor()
+	db.execute("SELECT * FROM GAME WHERE USER1 = ? OR USER2 = ?", (user, user))
+	conn.commit()
+	conn.close()
+	return "Worked"
+
+@app.route("/return_friends", methods = ["POST", "GET"])
+def return_friends():
+	incoming = request.json
+	user = incoming['name']
+	conn = connect_db()
+	db = conn.cursor()
+	db.execute("SELECT * FROM FRIENDS WHERE NAME1 = ? OR NAME2 = ?", (user, user))
+	conn.commit()
+	conn.close()
+	return "Worked"
+
 
 if __name__ == '__main__':
 	debug = True
