@@ -127,10 +127,9 @@ def return_games(user):
 
 @app.route("/update_game", methods = ["POST", "GET"])
 def update_game():
-	incoming = request.json
-	user1 = incoming['name1']
-	user2 = incoming['name2']
-	print user1,user2
+	print request.body
+	print request.args
+	print request.data
 	return ""
 	conn = connect_db()
 	db = conn.cursor()
