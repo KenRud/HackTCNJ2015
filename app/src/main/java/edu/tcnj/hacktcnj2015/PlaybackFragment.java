@@ -28,7 +28,7 @@ public class PlaybackFragment extends Fragment {
 
         // Initialize the video
         videoView = (VideoView) rootView.findViewById(R.id.playback_video);
-        videoView.setVideoURI(Uri.parse("https://dl.dropboxusercontent.com/u/1187475/We%20Broke%20Quickie%20-%20Assassins%20Creed%20Unity.mp4"));
+        videoView.setVideoURI(Uri.parse("https://dl.dropboxusercontent.com/u/1187475/The%20Waffle_Face%20C-SPAN%20Prank%20Calls.mp4"));
 
         // Play/pause button
         playButton = (Button) rootView.findViewById(R.id.play_button);
