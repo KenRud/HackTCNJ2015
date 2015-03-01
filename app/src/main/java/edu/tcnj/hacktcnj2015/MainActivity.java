@@ -11,6 +11,8 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
     public static final String TEST_MESSAGE = "edu.tcnj.hacktcnj2015.TESTMESSAGE";
 
+//    45.56.96.115:6969/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,7 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
     @Override
     public void onFragmentInteraction(String id) {
-        if (id.equals("1")) {
+        if (id.equals("DanSteve")) {
             // start playback activity
             Intent intent = new Intent(this, PlaybackActivity.class);
             intent.putExtra(TEST_MESSAGE, "something");
