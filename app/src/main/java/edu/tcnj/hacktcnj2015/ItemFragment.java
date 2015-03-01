@@ -1,8 +1,12 @@
 package edu.tcnj.hacktcnj2015;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +16,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import edu.tcnj.hacktcnj2015.dummy.DummyContent;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
+
+import edu.tcnj.hacktcnj2015.dummy.GameContent;
 
 /**
  * A fragment representing a list of Items.
@@ -23,7 +35,10 @@ import edu.tcnj.hacktcnj2015.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ItemFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ItemFragment extends Fragment implements AbsListView.OnItemClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final String SERVER_URL = "http://45.56.96.115:6969/";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +60,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private ArrayAdapter<GameContent.GameItem> mAdapter;
 
     // TODO: Rename and change types of parameters
     public static ItemFragment newInstance(String param1, String param2) {
@@ -74,8 +89,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         }
 
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                R.layout.list_item, android.R.id.text1, DummyContent.ITEMS);
+        mAdapter = new ArrayAdapter<GameContent.GameItem>(getActivity(),
+                R.layout.list_item, android.R.id.text1, GameContent.ITEMS);
     }
 
     @Override
@@ -89,6 +104,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+
+        new GetVideo().execute(SERVER_URL);
 
         return view;
     }
@@ -116,7 +133,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(GameContent.ITEMS.get(position).id);
         }
     }
 
@@ -130,6 +147,72 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
 
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
+        }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    public class GetVideo extends AsyncTask<String, String, String> {
+
+        private String result;
+
+        @Override
+        protected String doInBackground(String... params) {
+            URL url = null;
+            try {
+                url = new URL(params[0]);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection urlConnection = null;
+            try {
+                urlConnection = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            InputStream in = null;
+            StringBuilder sb = new StringBuilder();
+            try {
+                in = new BufferedInputStream(urlConnection.getInputStream());
+                Scanner scan = new Scanner(in);
+                while (scan.hasNextLine()) {
+                    sb.append(scan.nextLine());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                urlConnection.disconnect();
+            }
+            result = sb.toString();
+
+            System.out.println(result);
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            GameContent.clear();
+            GameContent.addItem(new GameContent.GameItem("DanSteve", "pizzaaaaaaaaaaaaaa!"));
+            GameContent.addItem(new GameContent.GameItem("2", "Item 2"));
+            GameContent.addItem(new GameContent.GameItem("3", "Item 3"));
+            mAdapter.notifyDataSetChanged();
         }
     }
 
