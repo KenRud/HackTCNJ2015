@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -168,12 +169,10 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
 
     }
 
-    public class GetVideo extends AsyncTask<String, String, String> {
-
-        private String result;
+    public class GetVideo extends AsyncTask<String, String, JSONObject> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected JSONObject doInBackground(String... params) {
             URL url = null;
             try {
                 url = new URL(params[0]);
@@ -201,27 +200,34 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
             } finally {
                 urlConnection.disconnect();
             }
-            result = sb.toString();
 
-            JSONObject object = null;
+            String str = sb.toString();
+            JSONObject result = null;
 
             try {
-                object = new JSONObject(result);
-                System.out.println(object.getJSONArray("result"));
+                result = new JSONObject(str);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            return "";
+            return result;
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(JSONObject result) {
             super.onPostExecute(result);
             GameContent.clear();
+            try {
+                JSONArray games = result.getJSONArray("result");
+                System.out.println(games);
+                for (int i=0; i<games.length(); i++) {
+                    GameContent.addItem(new GameContent.GameItem("DanSteve", games.getJSONArray(i).getString(1)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             GameContent.addItem(new GameContent.GameItem("DanSteve", "pizzaaaaaaaaaaaaaa!"));
-            GameContent.addItem(new GameContent.GameItem("2", "Item 2"));
-            GameContent.addItem(new GameContent.GameItem("3", "Item 3"));
             mAdapter.notifyDataSetChanged();
         }
     }
