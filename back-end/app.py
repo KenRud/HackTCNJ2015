@@ -57,7 +57,7 @@ def return_games():
 	user = incoming['name']
 	conn = connect_db()
 	db = conn.cursor()
-	db.execute("SELECT * FROM GAME WHERE USER1 = ? OR USER2 = ?", (user, user))
+	db.execute("SELECT * FROM GAME WHERE NAME1 = ? OR NAME2 = ?", (user, user))
 	conn.commit()
 	conn.close()
 	return "Worked"
