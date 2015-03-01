@@ -1,30 +1,47 @@
 package edu.tcnj.hacktcnj2015;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
-import edu.tcnj.hacktcnj2015.dummy.GameList;
 
+public class MainActivity extends ActionBarActivity implements ItemFragment.OnFragmentInteractionListener,
+        UsernameFragment.OnFragmentInteractionListener {
 
-public class MainActivity extends ActionBarActivity implements ItemFragment.OnFragmentInteractionListener {
-
-    public static final String USER = "Derek Duchesne";
+    public static String user = null;
 
     private static final String PREFIX = "edu.tcnj.hacktcnj2015.";
 
     public static final String TEST_MESSAGE = PREFIX + "TESTMESSAGE";
 
+    private Fragment userFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ItemFragment())
-                    .commit();
+
+        userFragment = new UsernameFragment();
+
+        if (user == null) {
+            setContentView(R.layout.activity_main);
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, userFragment)
+                        .commit();
+            }
+        } else {
+            setContentView(R.layout.activity_main);
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, new ItemFragment(user))
+                        .commit();
+            }
         }
     }
 
@@ -53,15 +70,35 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
     @Override
     public void onFragmentInteraction(String id) {
-        if (id.equals(USER + "Mitch Kobil")) {
+        if (id.equals(user + "Mitch Kobil")) {
             // start playback activity
             Intent intent = new Intent(this, PlaybackActivity.class);
             intent.putExtra(TEST_MESSAGE, "something");
-            intent.putExtra(PREFIX + "User", USER);
+            intent.putExtra(PREFIX + "User", user);
             intent.putExtra(PREFIX + "Opponent", GameList.ITEM_MAP.get(id).content);
             startActivity(intent);
         } else {
             System.out.println("User touched: " + id);
         }
+    }
+
+    public void submit() {
+        ItemFragment itemFragment = new ItemFragment(user);
+        getSupportFragmentManager().beginTransaction()
+                .hide(userFragment)
+                .add(R.id.container, itemFragment)
+                .show(itemFragment)
+                .commit();
+    }
+
+    @Override
+    public void onUsernameFragmentInteraction(String username, EditText editText) {
+        System.out.println(username);
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
+        user = username.trim();
+        submit();
     }
 }

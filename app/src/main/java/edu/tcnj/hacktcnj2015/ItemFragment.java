@@ -19,8 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.tcnj.hacktcnj2015.dummy.GameList;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -55,9 +53,11 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      */
     private ArrayAdapter<GameList.GameData> mAdapter;
 
+    private String user;
+
     // TODO: Rename and change types of parameters
     public static ItemFragment newInstance(String param1, String param2) {
-        ItemFragment fragment = new ItemFragment();
+        ItemFragment fragment = new ItemFragment("Derek Duchesne");
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -69,7 +69,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ItemFragment() {
+    public ItemFragment(String user) {
+        this.user = user;
     }
 
     @Override
@@ -98,7 +99,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
-        new AsyncUrlCall(this).execute("/return_games", "name", MainActivity.USER);
+        new AsyncUrlCall(this).execute("/return_games", "name", user);
 
         return view;
     }
@@ -169,7 +170,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
                 String name1 = games.getJSONArray(i).getString(0);
                 String name2 = games.getJSONArray(i).getString(1);
                 GameList.addItem(new GameList.GameData(name1 + name2,
-                        name1.equals(MainActivity.USER) ? name2 : name1));
+                        name1.equals(user) ? name2 : name1));
             }
         } catch (JSONException e) {
             e.printStackTrace();
