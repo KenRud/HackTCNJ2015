@@ -125,8 +125,8 @@ def return_games(user):
 	conn.close()
 	return jsonify(**{'result': result})
 
-@app.route("/update_game/<user>", methods = ["POST", "GET"])
-def update_game(user):
+@app.route("/update_game", methods = ["POST", "GET"])
+def update_game():
 	incoming = request.json
 	user1 = incoming['name1']
 	user2 = incoming['name2']
