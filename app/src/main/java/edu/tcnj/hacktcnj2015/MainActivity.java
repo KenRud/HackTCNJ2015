@@ -1,16 +1,15 @@
 package edu.tcnj.hacktcnj2015;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 
 public class MainActivity extends ActionBarActivity implements ItemFragment.OnFragmentInteractionListener {
+
+    public static final String TEST_MESSAGE = "edu.tcnj.hacktcnj2015.TESTMESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +47,13 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
     @Override
     public void onFragmentInteraction(String id) {
-        System.out.println("User touched: " + id);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+        if (id.equals("1")) {
+            // start playback activity
+            Intent intent = new Intent(this, PlaybackActivity.class);
+            intent.putExtra(TEST_MESSAGE, "something");
+            startActivity(intent);
+        } else {
+            System.out.println("User touched: " + id);
         }
     }
 }

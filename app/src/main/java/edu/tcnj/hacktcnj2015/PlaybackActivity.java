@@ -1,22 +1,10 @@
 package edu.tcnj.hacktcnj2015;
 
-import android.content.Context;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.VideoView;
-
-import java.io.IOException;
 
 
 public class PlaybackActivity extends ActionBarActivity {
@@ -24,7 +12,13 @@ public class PlaybackActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(MainActivity.TEST_MESSAGE);
+        System.out.println(message);
+
         setContentView(R.layout.activity_playback);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaybackFragment())

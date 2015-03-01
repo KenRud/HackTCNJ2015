@@ -24,6 +24,10 @@
         <activity
             android:name=".PlaybackActivity"
             android:label="@string/title_activity_playback" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.tcnj.hacktcnj2015.MainActivity" />
+
         </activity>
     </application>
 </manifest>
