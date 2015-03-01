@@ -2,7 +2,6 @@ package edu.tcnj.hacktcnj2015;
 
 import android.app.Activity;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -20,14 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Scanner;
-
 import edu.tcnj.hacktcnj2015.dummy.GameContent;
 
 /**
@@ -40,9 +31,7 @@ import edu.tcnj.hacktcnj2015.dummy.GameContent;
  * interface.
  */
 public class ItemFragment extends Fragment implements AbsListView.OnItemClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
-
-    public static final String SERVER_URL = "http://45.56.96.115:6969/return_games";
+        LoaderManager.LoaderCallbacks<Cursor>, AsyncUrlCall.TaskListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -109,7 +98,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
-        new GetVideo().execute(SERVER_URL + "/Derek%20Duchesne");
+        new AsyncUrlCall(this).execute("/return_games", "name", "Derek Duchesne");
 
         return view;
     }
@@ -169,67 +158,19 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
 
     }
 
-    public class GetVideo extends AsyncTask<String, String, JSONObject> {
-
-        @Override
-        protected JSONObject doInBackground(String... params) {
-            URL url = null;
-            try {
-                url = new URL(params[0]);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+    @Override
+    public void onFinished(JSONObject result) {
+        GameContent.clear();
+        try {
+            JSONArray games = result.getJSONArray("result");
+            System.out.println(games);
+            for (int i=0; i<games.length(); i++) {
+                GameContent.addItem(new GameContent.GameItem(""+i, games.getJSONArray(i).getString(1)));
             }
-
-            HttpURLConnection urlConnection = null;
-            try {
-                urlConnection = (HttpURLConnection) url.openConnection();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            InputStream in = null;
-            StringBuilder sb = new StringBuilder();
-            try {
-                in = new BufferedInputStream(urlConnection.getInputStream());
-                Scanner scan = new Scanner(in);
-                while (scan.hasNextLine()) {
-                    sb.append(scan.nextLine());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                urlConnection.disconnect();
-            }
-
-            String str = sb.toString();
-            JSONObject result = null;
-
-            try {
-                result = new JSONObject(str);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return result;
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            super.onPostExecute(result);
-            GameContent.clear();
-            try {
-                JSONArray games = result.getJSONArray("result");
-                System.out.println(games);
-                for (int i=0; i<games.length(); i++) {
-                    GameContent.addItem(new GameContent.GameItem("DanSteve", games.getJSONArray(i).getString(1)));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            GameContent.addItem(new GameContent.GameItem("DanSteve", "pizzaaaaaaaaaaaaaa!"));
-            mAdapter.notifyDataSetChanged();
-        }
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
