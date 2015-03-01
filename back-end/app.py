@@ -1,4 +1,4 @@
-from flask import Flask, g, request
+from flask import Flask, g, request, jsonify
 import sqlite3
 import os
 
@@ -108,19 +108,17 @@ def make_game():
 	return "Success"
 
 
-@app.route("/return_games", methods = ["POST", "GET"])
-def return_games():
-	incoming = request.json
-	user = incoming['name']
+@app.route("/return_games/<user>", methods = ["POST", "GET"])
+def return_games(user):
 	conn = connect_db()
 	db = conn.cursor()
 	db.execute("SELECT * FROM GAME WHERE NAME1 = ? OR NAME2 = ?", (user, user))
 	result = db.fetchall()
 	if result is []:
-		return "No Games"
+		return []
 	conn.commit()
 	conn.close()
-	return result
+	return jsonify(**{'result': result})
 
 
 if __name__ == '__main__':
