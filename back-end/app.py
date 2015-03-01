@@ -1,6 +1,8 @@
-from flask import Flask, g, request, jsonify
+from flask import Flask, g, request, jsonify,send_from_directory
 import sqlite3
+from random import randrange
 import os
+from subprocess import call
 
 app = Flask(__name__)
 
@@ -23,6 +25,7 @@ def teardown_request(exception):
 @app.route('/')
 def hello_world():
 	return "hello world."
+
 
 
 @app.route("/create_account", methods = ["POST", "GET"])
@@ -147,7 +150,47 @@ def update_game():
 	result = db.fetchone()
 	conn.commit()
 	conn.close()
-	return jsonify(**{'result': result})	
+	return jsonify(**{'result': result})
+
+
+@app.route("/get_file", methods = ["POST", "GET"])
+def get_file():
+	incoming = request.form
+	user1 = incoming['name1']
+	user2 = incoming['name2']
+	turn = incoming['turn']
+	score1 = incoming['score1']
+	score2 = incoming['score2']
+	video = incoming['video']
+	both_users = [user1, user2]
+	both_users.sort()
+	user1,user2 = both_users[0],both_users[1]
+	return send_from_directory(".", "out.txt")
+
+@app.route("/get_song", methods = ["POST", "GET"])
+def get_song():
+	incoming = request.json
+	user = incoming['name']
+	val = randrange(3)
+	url = ""
+	if val == 1:
+		#believe in life after love
+		url = "https://www.youtube.com/watch?v=MB2GQ28sE5s"
+	elif val == 0: 
+		#avril
+		url = "https://www.youtube.com/watch?v=VQXfexNVPSs"
+	else:
+		#frozen
+		url = "https://www.youtube.com/watch?v=L0MK7qz13bU"
+	url = "https://www.youtube.com/watch?v=Xm_dS-wEFvs"
+	command = "youtube-dl -x --audio-format mp3 %s" % url
+	os.chdir("./music/")
+	clear = "rm %s" % next(os.walk(os.getcwd()))[2][0]
+	call(clear.split())
+	call(command.split(), shell=False)
+	path = next(os.walk(os.getcwd()))[2][0]
+	os.chdir("./../")
+	return send_from_directory("./music/", path)
 
 
 if __name__ == '__main__':
