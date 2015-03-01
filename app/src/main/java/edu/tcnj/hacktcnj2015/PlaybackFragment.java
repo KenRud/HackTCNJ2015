@@ -1,17 +1,13 @@
 package edu.tcnj.hacktcnj2015;
 
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.VideoView;
-
-import edu.tcnj.hacktcnj2015.R;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -32,7 +28,7 @@ public class PlaybackFragment extends Fragment {
 
         // Initialize the video
         videoView = (VideoView) rootView.findViewById(R.id.playback_video);
-        videoView.setVideoURI(Uri.parse("http://media.w3.org/2010/05/sintel/trailer.mp4"));
+        videoView.setVideoURI(Uri.parse("https://dl.dropboxusercontent.com/u/1187475/We%20Broke%20Quickie%20-%20Assassins%20Creed%20Unity.mp4"));
 
         // Play/pause button
         playButton = (Button) rootView.findViewById(R.id.play_button);

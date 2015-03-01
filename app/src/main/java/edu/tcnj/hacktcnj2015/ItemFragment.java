@@ -16,6 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +41,7 @@ import edu.tcnj.hacktcnj2015.dummy.GameContent;
 public class ItemFragment extends Fragment implements AbsListView.OnItemClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String SERVER_URL = "http://45.56.96.115:6969/";
+    public static final String SERVER_URL = "http://45.56.96.115:6969/return_games";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,7 +108,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
-        new GetVideo().execute(SERVER_URL);
+        new GetVideo().execute(SERVER_URL + "/Derek%20Duchesne");
 
         return view;
     }
@@ -200,7 +203,14 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
             }
             result = sb.toString();
 
-            System.out.println(result);
+            JSONObject object = null;
+
+            try {
+                object = new JSONObject(result);
+                System.out.println(object.getJSONArray("result"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             return "";
         }
