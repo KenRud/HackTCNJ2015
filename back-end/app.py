@@ -107,9 +107,10 @@ def make_game():
 	conn = connect_db()
 	db = conn.cursor()
 	db.execute("INSERT INTO GAME (NAME1,NAME2,TURN_COUNTER,SCORE1,SCORE2,VIDEO) VALUES (?,?,0,0,0,'Video Link');", (user1, user2))
+	db.execute("SELECT * FROM GAME WHERE NAME1 = ? and NAME2 = ?", (user1, user2))
+	result = db.fetchone()
 	conn.commit()
 	conn.close()
-	result = "Success"
 	return jsonify(**{'result': result})
 
 
@@ -132,12 +133,18 @@ def update_game():
 	incoming = request.form
 	user1 = incoming['name1']
 	user2 = incoming['name2']
+	turn = incoming['turn']
+	score1 = incoming['score1']
+	score2 = incoming['score2']
+	video = incoming['video']
+	both_users = [user1, user2]
+	both_users.sort()
+	user1,user2 = both_users[0],both_users[1]
 	conn = connect_db()
 	db = conn.cursor()
-	db.execute("SELECT * FROM GAME WHERE NAME1 = ? OR NAME2 = ?", (user, user))
+	db.execute("UPDATE GAME SET TURN_COUNTER=?, VIDEO=? WHERE NAME1=? AND NAME2=?", (turn, video, user1, user2))
+	db.execute("SELECT * FROM GAME WHERE NAME1 = ? and NAME2 = ?", (user1, user2))
 	result = db.fetchone()
-	if result is []:
-		return jsonify(**{'result': result})
 	conn.commit()
 	conn.close()
 	return jsonify(**{'result': result})	

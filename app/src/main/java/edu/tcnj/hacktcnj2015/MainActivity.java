@@ -6,12 +6,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import edu.tcnj.hacktcnj2015.dummy.GameList;
+
 
 public class MainActivity extends ActionBarActivity implements ItemFragment.OnFragmentInteractionListener {
 
-    public static final String TEST_MESSAGE = "edu.tcnj.hacktcnj2015.TESTMESSAGE";
+    public static final String USER = "Derek Duchesne";
 
-//    45.56.96.115:6969/
+    private static final String PREFIX = "edu.tcnj.hacktcnj2015.";
+
+    public static final String TEST_MESSAGE = PREFIX + "TESTMESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +53,12 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
     @Override
     public void onFragmentInteraction(String id) {
-        if (id.equals("0")) {
+        if (id.equals(USER + "Mitch Kobil")) {
             // start playback activity
             Intent intent = new Intent(this, PlaybackActivity.class);
             intent.putExtra(TEST_MESSAGE, "something");
+            intent.putExtra(PREFIX + "User", USER);
+            intent.putExtra(PREFIX + "Opponent", GameList.ITEM_MAP.get(id).content);
             startActivity(intent);
         } else {
             System.out.println("User touched: " + id);

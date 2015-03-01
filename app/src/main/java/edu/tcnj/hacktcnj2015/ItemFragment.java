@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.tcnj.hacktcnj2015.dummy.GameContent;
+import edu.tcnj.hacktcnj2015.dummy.GameList;
 
 /**
  * A fragment representing a list of Items.
@@ -53,7 +53,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ArrayAdapter<GameContent.GameItem> mAdapter;
+    private ArrayAdapter<GameList.GameData> mAdapter;
 
     // TODO: Rename and change types of parameters
     public static ItemFragment newInstance(String param1, String param2) {
@@ -82,8 +82,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         }
 
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<GameContent.GameItem>(getActivity(),
-                R.layout.list_item, android.R.id.text1, GameContent.ITEMS);
+        mAdapter = new ArrayAdapter<GameList.GameData>(getActivity(),
+                R.layout.list_item, android.R.id.text1, GameList.ITEMS);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
-        new AsyncUrlCall(this).execute("/return_games", "name", "Derek Duchesne");
+        new AsyncUrlCall(this).execute("/return_games", "name", MainActivity.USER);
 
         return view;
     }
@@ -126,7 +126,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(GameContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(GameList.ITEMS.get(position).id);
         }
     }
 
@@ -160,12 +160,16 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
 
     @Override
     public void onFinished(JSONObject result) {
-        GameContent.clear();
+
+        // [Name1, Name2, turncounter, score1, score2, video]
+        GameList.clear();
         try {
             JSONArray games = result.getJSONArray("result");
-            System.out.println(games);
             for (int i=0; i<games.length(); i++) {
-                GameContent.addItem(new GameContent.GameItem(""+i, games.getJSONArray(i).getString(1)));
+                String name1 = games.getJSONArray(i).getString(0);
+                String name2 = games.getJSONArray(i).getString(1);
+                GameList.addItem(new GameList.GameData(name1 + name2,
+                        name1.equals(MainActivity.USER) ? name2 : name1));
             }
         } catch (JSONException e) {
             e.printStackTrace();
