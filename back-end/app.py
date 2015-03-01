@@ -22,7 +22,7 @@ def teardown_request(exception):
 
 @app.route('/')
 def hello_world():
-	return "hello worls."
+	return "hello world."
 
 
 @app.route("/create_account", methods = ["POST", "GET"])
@@ -124,6 +124,20 @@ def return_games(user):
 	conn.commit()
 	conn.close()
 	return jsonify(**{'result': result})
+
+@app.route("/update_game", methods = ["POST", "GET"])
+def update_game():
+	print request.form
+	return "done"
+	conn = connect_db()
+	db = conn.cursor()
+	db.execute("SELECT * FROM GAME WHERE NAME1 = ? OR NAME2 = ?", (user, user))
+	result = db.fetchall()
+	if result is []:
+		return jsonify(**{'result': result})
+	conn.commit()
+	conn.close()
+	return jsonify(**{'result': result})	
 
 
 if __name__ == '__main__':
