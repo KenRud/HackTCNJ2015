@@ -127,7 +127,6 @@ def return_games(user):
 
 @app.route("/update_game", methods = ["POST", "GET"])
 def update_game():
-	print request.body
 	print request.args
 	print request.data
 	return ""
