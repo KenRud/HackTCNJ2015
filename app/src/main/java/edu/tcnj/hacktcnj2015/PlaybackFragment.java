@@ -17,9 +17,10 @@ import edu.tcnj.hacktcnj2015.R;
  * A placeholder fragment containing a simple view.
  */
 public class PlaybackFragment extends Fragment {
-    private VideoView videoView;
-    private Button button;
     private View rootView;
+    private VideoView videoView;
+    private Button playButton;
+    private Button replayButton;
 
     public PlaybackFragment() {
     }
@@ -32,46 +33,41 @@ public class PlaybackFragment extends Fragment {
         // Initialize the video
         videoView = (VideoView) rootView.findViewById(R.id.playback_video);
         videoView.setVideoURI(Uri.parse("http://media.w3.org/2010/05/sintel/trailer.mp4"));
-//        setSeekCompleteListener();
 
-        // Attach button listeners
-        Button playButton = (Button) rootView.findViewById(R.id.play_button);
-        playButton.setOnTouchListener(new View.OnTouchListener() {
+        // Play/pause button
+        playButton = (Button) rootView.findViewById(R.id.play_button);
+        playButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                playVideo();
-                return false;
+            public void onClick(View v) {
+                if (videoView.isPlaying()) {
+                    stopVideo();
+                } else {
+                    playVideo();
+                }
             }
         });
 
-        Button replayButton = (Button) rootView.findViewById(R.id.rewind_button);
-        replayButton.setOnTouchListener(new View.OnTouchListener() {
+        // Restart button
+        replayButton = (Button) rootView.findViewById(R.id.rewind_button);
+        replayButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 replayVideo();
-                return false;
             }
         });
 
         return rootView;
     }
 
-    private void setSeekCompleteListener() {
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
-                    @Override
-                    public void onSeekComplete(MediaPlayer mp) {
-                        playVideo();
-                    }
-                });
-            }
-        });
-    }
-
     public void playVideo() {
         videoView.start();
+        playButton.setText(R.string.stop_button_text);
+    }
+
+    public void stopVideo() {
+        videoView.pause();
+        videoView.seekTo(0);
+        playButton.setText(R.string.play_button_text);
     }
 
     public void replayVideo() {
