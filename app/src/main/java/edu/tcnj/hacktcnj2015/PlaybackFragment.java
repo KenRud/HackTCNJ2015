@@ -1,5 +1,6 @@
 package edu.tcnj.hacktcnj2015;
 
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,8 +17,10 @@ import edu.tcnj.hacktcnj2015.R;
  * A placeholder fragment containing a simple view.
  */
 public class PlaybackFragment extends Fragment {
+    private View rootView;
     private VideoView videoView;
-    private Button button;
+    private Button playButton;
+    private Button replayButton;
 
     public PlaybackFragment() {
     }
@@ -25,22 +28,53 @@ public class PlaybackFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_playback, container, false);
+        rootView = inflater.inflate(R.layout.fragment_playback, container, false);
 
         // Initialize the video
         videoView = (VideoView) rootView.findViewById(R.id.playback_video);
         videoView.setVideoURI(Uri.parse("http://media.w3.org/2010/05/sintel/trailer.mp4"));
 
-        // PlaybackActivity button
-        button = (Button) rootView.findViewById(R.id.play_button);
-        button.setOnTouchListener(new View.OnTouchListener() {
+        // Play/pause button
+        playButton = (Button) rootView.findViewById(R.id.play_button);
+        playButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                videoView.start();
-                return false;
+            public void onClick(View v) {
+                if (videoView.isPlaying()) {
+                    stopVideo();
+                } else {
+                    playVideo();
+                }
+            }
+        });
+
+        // Restart button
+        replayButton = (Button) rootView.findViewById(R.id.rewind_button);
+        replayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replayVideo();
             }
         });
 
         return rootView;
+    }
+
+    public void playVideo() {
+        videoView.start();
+        playButton.setText(R.string.stop_button_text);
+    }
+
+    public void stopVideo() {
+        videoView.pause();
+        videoView.seekTo(0);
+        playButton.setText(R.string.play_button_text);
+    }
+
+    public void replayVideo() {
+        if (videoView.isPlaying()) {
+            videoView.seekTo(0);
+        } else {
+            playVideo();
+        }
     }
 }
