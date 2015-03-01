@@ -1,14 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:gravity="center"
     tools:context="edu.tcnj.hacktcnj2015.ChallengeFragment">
+
+    <FrameLayout
+        android:id="@+id/preview_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_above="@+id/start_challenge_button"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"></FrameLayout>
 
     <Button
         android:id="@+id/start_challenge_button"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:text="@string/start_challenge_button_text" />
-
-</RelativeLayout>
+</LinearLayout>
