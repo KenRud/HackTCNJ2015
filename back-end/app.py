@@ -37,11 +37,13 @@ def create_account():
 	result = db.fetchall()
 	return "0"
 	if result is not []:
-		return "Error"
+		result = "Error"
+		return jsonify(**{'result': result})
 	db.execute("INSERT INTO USER (NAME,PASSWORD) VALUES (?,?);", (user, password))
 	conn.commit()
 	conn.close()
-	return "Success"
+	result = "Success"
+	return jsonify(**{'result': result})
 
 @app.route("/login", methods = ["POST", "GET"])
 def login():
@@ -54,11 +56,13 @@ def login():
 	db.execute("SELECT * FROM USER WHERE NAME = ? AND PASSWORD = ?", (user, password))
 	result = db.fetchone()
 	conn.commit()
-	conn.close()
+	conn.close()jsonify(**{'result': result})
 	if result is None:
-		return "Error"
+		result = "Error"
+		return jsonify(**{'result': result})
 	else:
-		return "Success"
+		result = "Success"
+		return jsonify(**{'result': result})
 
 @app.route("/make_friends", methods = ["POST", "GET"])
 def make_friends():
@@ -74,7 +78,7 @@ def make_friends():
 	db.execute("INSERT INTO FRIENDS (NAME1,NAME2) VALUES (?,?);", (user1, user2))
 	conn.commit()
 	conn.close()
-	return "Success"
+	return jsonify(**{'result': result})
 
 @app.route("/return_friends", methods = ["POST", "GET"])
 def return_friends():
@@ -85,11 +89,11 @@ def return_friends():
 	db.execute("SELECT * FROM FRIENDS WHERE NAME1 = ? OR NAME2 = ?", (user, user))
 	result = db.fetchall()
 	if result is []:
-		return "No Friends."
+		return jsonify(**{'result': result})
 	result = [i for sub in result for i in sub if i != user]
 	conn.commit()
 	conn.close()
-	return result
+	return jsonify(**{'result': result})
 
 
 @app.route("/make_game", methods = ["POST", "GET"])
@@ -105,7 +109,8 @@ def make_game():
 	db.execute("INSERT INTO GAME (NAME1,NAME2,TURN_COUNTER,SCORE1,SCORE2,VIDEO) VALUES (?,?,0,0,0,'Video Link');", (user1, user2))
 	conn.commit()
 	conn.close()
-	return "Success"
+	result = "Success"
+	return jsonify(**{'result': result})
 
 
 @app.route("/return_games/<user>", methods = ["POST", "GET"])
@@ -115,7 +120,7 @@ def return_games(user):
 	db.execute("SELECT * FROM GAME WHERE NAME1 = ? OR NAME2 = ?", (user, user))
 	result = db.fetchall()
 	if result is []:
-		return []
+		return jsonify(**{'result': result})
 	conn.commit()
 	conn.close()
 	return jsonify(**{'result': result})
