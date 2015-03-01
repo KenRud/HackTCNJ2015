@@ -56,7 +56,7 @@ def login():
 	db.execute("SELECT * FROM USER WHERE NAME = ? AND PASSWORD = ?", (user, password))
 	result = db.fetchone()
 	conn.commit()
-	conn.close()jsonify(**{'result': result})
+	conn.close()
 	if result is None:
 		result = "Error"
 		return jsonify(**{'result': result})
