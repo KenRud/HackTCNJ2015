@@ -4,11 +4,14 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_playback">Playback</string>
 
+    <!-- Playback UI text -->
     <string name="playback_title">Playback</string>
     <string name="play_button_text">Play</string>
     <string name="stop_button_text">Stop</string>
     <string name="replay_button_text">Replay</string>
+    <string name="send_challenge_text">Send Challenge!</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Challenge UI text -->
+    <string name="start_challenge_button_text">Go</string>
+
 </resources>

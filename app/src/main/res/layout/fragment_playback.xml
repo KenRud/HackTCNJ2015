@@ -34,4 +34,12 @@
             android:text="@string/replay_button_text" />
     </LinearLayout>
 
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/send_challenge_text"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:onClick="switchToChallengeScreen"/>
+
 </LinearLayout>
