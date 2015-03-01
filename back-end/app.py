@@ -27,7 +27,7 @@ def hello_world():
 
 @app.route("/create_account", methods = ["POST", "GET"])
 def create_account():
-	incoming = request.json
+	incoming = request.form
 	user = incoming['name']
 	password = incoming['password']
 	conn = connect_db()
@@ -47,7 +47,7 @@ def create_account():
 
 @app.route("/login", methods = ["POST", "GET"])
 def login():
-	incoming = request.json
+	incoming = request.form
 	user = incoming['name']
 	password = incoming['password']
 	conn = connect_db()
@@ -66,7 +66,7 @@ def login():
 
 @app.route("/make_friends", methods = ["POST", "GET"])
 def make_friends():
-	incoming = request.json
+	incoming = request.form
 	user1 = incoming['name1']
 	user2 = incoming['name2']
 	both_users = [user1, user2]
@@ -82,7 +82,7 @@ def make_friends():
 
 @app.route("/return_friends", methods = ["POST", "GET"])
 def return_friends():
-	incoming = request.json
+	incoming = request.form
 	user = incoming['name']
 	conn = connect_db()
 	db = conn.cursor()
@@ -98,7 +98,7 @@ def return_friends():
 
 @app.route("/make_game", methods = ["POST", "GET"])
 def make_game():
-	incoming = request.json
+	incoming = request.form
 	user1 = incoming['name1']
 	user2 = incoming['name2']
 	both_users = [user1, user2]
@@ -113,8 +113,10 @@ def make_game():
 	return jsonify(**{'result': result})
 
 
-@app.route("/return_games/<user>", methods = ["POST", "GET"])
-def return_games(user):
+@app.route("/return_games", methods = ["POST", "GET"])
+def return_games():
+	incoming = request.form
+	user = incoming['name']
 	conn = connect_db()
 	db = conn.cursor()
 	db.execute("SELECT * FROM GAME WHERE NAME1 = ? OR NAME2 = ?", (user, user))
@@ -127,12 +129,13 @@ def return_games(user):
 
 @app.route("/update_game", methods = ["POST", "GET"])
 def update_game():
-	print request.form
-	return "done"
+	incoming = request.form
+	user1 = incoming['name1']
+	user2 = incoming['name2']
 	conn = connect_db()
 	db = conn.cursor()
 	db.execute("SELECT * FROM GAME WHERE NAME1 = ? OR NAME2 = ?", (user, user))
-	result = db.fetchall()
+	result = db.fetchone()
 	if result is []:
 		return jsonify(**{'result': result})
 	conn.commit()
