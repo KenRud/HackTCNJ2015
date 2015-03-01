@@ -70,16 +70,12 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
     @Override
     public void onFragmentInteraction(String id) {
-        if (id.equals(user + "Mitch Kobil")) {
-            // start playback activity
-            Intent intent = new Intent(this, PlaybackActivity.class);
-            intent.putExtra(TEST_MESSAGE, "something");
-            intent.putExtra(PREFIX + "User", user);
-            intent.putExtra(PREFIX + "Opponent", GameList.ITEM_MAP.get(id).content);
-            startActivity(intent);
-        } else {
-            System.out.println("User touched: " + id);
-        }
+        // start playback activity
+        Intent intent = new Intent(this, PlaybackActivity.class);
+        intent.putExtra(TEST_MESSAGE, "something");
+        intent.putExtra(PREFIX + "User", user);
+        intent.putExtra(PREFIX + "Opponent", GameList.ITEM_MAP.get(id).content);
+        startActivity(intent);
     }
 
     public void submit() {
