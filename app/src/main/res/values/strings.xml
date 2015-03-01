@@ -6,6 +6,7 @@
 
     <string name="playback_title">Playback</string>
     <string name="play">Play</string>
+    <string name="replay_button_text">Replay</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
