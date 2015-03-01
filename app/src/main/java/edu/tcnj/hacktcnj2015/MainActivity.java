@@ -49,7 +49,7 @@ public class MainActivity extends ActionBarActivity implements ItemFragment.OnFr
 
     @Override
     public void onFragmentInteraction(String id) {
-        if (id.equals("DanSteve")) {
+        if (id.equals("0")) {
             // start playback activity
             Intent intent = new Intent(this, PlaybackActivity.class);
             intent.putExtra(TEST_MESSAGE, "something");
