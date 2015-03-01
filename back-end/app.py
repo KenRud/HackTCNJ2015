@@ -127,8 +127,11 @@ def return_games(user):
 
 @app.route("/update_game", methods = ["POST", "GET"])
 def update_game():
-	print request.form
-	return "done"
+	incoming = request.form
+	user1 = incoming['name1']
+	user2 = incoming['name2']
+	print user1
+	print user2
 	conn = connect_db()
 	db = conn.cursor()
 	db.execute("SELECT * FROM GAME WHERE NAME1 = ? OR NAME2 = ?", (user, user))
